@@ -66,3 +66,44 @@ export function toBengaliNumerals(num: number | string): string {
   const bnNums = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
   return String(num).replace(/[0-9]/g, (digit) => bnNums[parseInt(digit)]);
 }
+
+export function formatDateToDDMMYYYY(dateStr: string | undefined | null): string {
+  if (!dateStr) return '';
+  const str = String(dateStr).trim();
+  if (!str) return '';
+
+  // If already in DD/MM/YYYY or DD-MM-YYYY or DD.MM.YYYY
+  const ddmmyyyyMatch = str.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/);
+  if (ddmmyyyyMatch) {
+    const dd = ddmmyyyyMatch[1].padStart(2, '0');
+    const mm = ddmmyyyyMatch[2].padStart(2, '0');
+    const yyyy = ddmmyyyyMatch[3];
+    return `${dd}/${mm}/${yyyy}`;
+  }
+
+  // If YYYY-MM-DD or YYYY/MM/DD or ISO string
+  const yyyymmddMatch = str.match(/^(\d{4})[\/\-\.](\d{1,2})[\/\-\.](\d{1,2})/);
+  if (yyyymmddMatch) {
+    const yyyy = yyyymmddMatch[1];
+    const mm = yyyymmddMatch[2].padStart(2, '0');
+    const dd = yyyymmddMatch[3].padStart(2, '0');
+    return `${dd}/${mm}/${yyyy}`;
+  }
+
+  // Try Date parsing
+  const d = new Date(str);
+  if (!isNaN(d.getTime())) {
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+  }
+
+  return str;
+}
+
+export function formatBengaliDateDDMMYYYY(dateStr: string | undefined | null): string {
+  const ddmmyyyy = formatDateToDDMMYYYY(dateStr);
+  return toBengaliNumerals(ddmmyyyy);
+}
+

@@ -59,6 +59,7 @@ import { FileEntry, MemoEntry, ExpenseEntry, DEPARTMENTS, SUBJECTS_BY_DEPT, DESI
 import EmployeeDatabase from './EmployeeDatabase';
 import DailyExpenseApproval from './DailyExpenseApproval';
 import PilotProject from './PilotProject';
+import DatabaseBackupModal from './DatabaseBackupModal';
 
 const toBengali = (str: string) => {
   if (!str) return '';
@@ -255,6 +256,7 @@ export default function FileRegister() {
   const [editingOptionValue, setEditingOptionValue] = useState('');
   const [deletingOptionIdx, setDeletingOptionIdx] = useState<number | null>(null);
   const [addOptionError, setAddOptionError] = useState('');
+  const [isDatabaseBackupModalOpen, setIsDatabaseBackupModalOpen] = useState(false);
 
   // ------------------------------------------
   // FORM FIELDS: MEMO REGISTER
@@ -3211,6 +3213,13 @@ export default function FileRegister() {
                 </div>
                 <div className="space-y-1 px-2">
                   <button
+                    onClick={() => { setIsDatabaseBackupModalOpen(true); setIsMenuOpen(false); }}
+                    className="w-full text-left px-4 py-3 rounded-lg text-sm font-bold flex items-center gap-3 hover:bg-slate-100 text-slate-700 transition-colors"
+                  >
+                    <Database size={18} className="text-[#cca355]" />
+                    <span>সম্পূর্ণ ডাটাবেজ ব্যাকআপ</span>
+                  </button>
+                  <button
                     onClick={() => { setIsSettingsOpen(true); setIsMenuOpen(false); }}
                     className="w-full text-left px-4 py-3 rounded-lg text-sm font-bold flex items-center gap-3 hover:bg-slate-100 text-slate-700 transition-colors"
                   >
@@ -3281,6 +3290,18 @@ export default function FileRegister() {
               EN
             </button>
           </div>
+
+          {/* Database Backup & Download Button */}
+          <button 
+            onClick={() => setIsDatabaseBackupModalOpen(true)}
+            className="bg-amber-500/10 hover:bg-amber-500/20 text-[#cca355] border border-[#cca355]/40 px-3 py-1.5 rounded-lg font-bold text-[11px] shadow-xs transition-all duration-200 flex items-center gap-1.5 cursor-pointer hover:border-[#cca355] hover:-translate-y-0.5"
+            title="সম্পূর্ণ ডাটাবেজ ব্যাকআপ ও ডাউনলোড করুন"
+            id="full-db-backup-header-btn"
+          >
+            <Database size={13} className="text-[#cca355]" />
+            <span className="hidden sm:inline font-black">ডাটাবেজ ব্যাকআপ</span>
+            <span className="sm:hidden font-black">ব্যাকআপ</span>
+          </button>
 
           {/* Profile capsule */}
           <div className="flex items-center gap-3 bg-slate-900 px-3.5 py-1.5 rounded-xl border border-slate-800 shadow-md" id="profile-controls">
@@ -4858,6 +4879,33 @@ export default function FileRegister() {
                   <span>✓</span> BSK Vault Policies Active
                 </div>
               </div>
+            </div>
+
+            {/* Database Full Backup Action Banner */}
+            <div className="bg-gradient-to-r from-[#0A111E] via-slate-900 to-indigo-950 rounded-2xl p-5 text-white border border-[#cca355]/40 shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4 text-left">
+                <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-[#cca355] shrink-0">
+                  <Database size={24} />
+                </div>
+                <div>
+                  <h4 className="text-base font-extrabold text-white flex items-center gap-2">
+                    <span>{lang === 'BN' ? 'সম্পূর্ণ ডাটাবেজ ব্যাকআপ ও এক্সপোর্ট' : 'Complete Database Backup & Export'}</span>
+                    <span className="bg-[#cca355] text-slate-950 text-[9px] font-black px-1.5 py-0.5 rounded uppercase">Full DB</span>
+                  </h4>
+                  <p className="text-xs text-slate-300 font-medium mt-0.5">
+                    {lang === 'BN' 
+                      ? 'সকল ফাইল, মেমো, কর্মকর্তা-কর্মচারী, ভাউচার ও পাইলট প্রকল্পের তথ্য JSON ও মাল্টি-শীট এক্সেলে ব্যাকআপ নিন।'
+                      : 'Download full JSON database dump or multi-sheet Excel workbook covering all active collections.'}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsDatabaseBackupModalOpen(true)}
+                className="px-5 py-2.5 bg-[#cca355] hover:bg-[#b58f47] text-slate-950 font-black rounded-xl text-xs transition flex items-center gap-2 cursor-pointer shadow-md shrink-0 hover:scale-105"
+              >
+                <Download size={15} />
+                <span>{lang === 'BN' ? 'ব্যাকআপ ডাউনলোড করুন' : 'Download Database Backup'}</span>
+              </button>
             </div>
 
             {/* Super Admin User Management Panels */}
@@ -7590,6 +7638,13 @@ export default function FileRegister() {
           </div>
         </div>
       )}
+
+      {/* VIEW 7: DATABASE BACKUP & EXPORT MODAL */}
+      <DatabaseBackupModal 
+        isOpen={isDatabaseBackupModalOpen}
+        onClose={() => setIsDatabaseBackupModalOpen(false)}
+        lang={lang}
+      />
 
     </div>
   );

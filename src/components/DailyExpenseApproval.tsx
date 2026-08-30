@@ -41,7 +41,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { db, handleFirestoreError, OperationType } from '../firebase';
 import { DailyExpenseApprovalEntry, DailyExpenseItem, UserProfile } from '../types';
 import { INITIAL_BUDGET_DATA } from '../budgetData';
-import { numberToBengaliWords, toBengaliNumerals } from '../utils/bengaliToWords';
+import { numberToBengaliWords, toBengaliNumerals, formatDateToDDMMYYYY, formatBengaliDateDDMMYYYY } from '../utils/bengaliToWords';
 
 const BENGALI_MONTHS: { value: string; name: string; enName: string }[] = [
   { value: '01', name: 'জানুয়ারি', enName: 'January' },
@@ -554,7 +554,7 @@ export default function DailyExpenseApproval({ userProfile, hasActionAccess, log
               </div>
               <div class="info-row" style="width: 130px;">
                 <span style="font-weight: 800; white-space: nowrap;">তারিখ:</span>
-                <span class="dot-line" style="text-align: center;">${toBengaliNumerals(entry.date || '')}</span>
+                <span class="dot-line" style="text-align: center;">${formatBengaliDateDDMMYYYY(entry.date || '')}</span>
               </div>
             </div>
           </div>
@@ -1219,7 +1219,7 @@ pause
           <div className="flex items-center w-28">
             <span className="font-extrabold whitespace-nowrap">তারিখ:</span>
             <span className="border-b border-black flex-1 ml-2 text-center font-bold">
-              {toBengaliNumerals(entry.date)}
+              {formatBengaliDateDDMMYYYY(entry.date)}
             </span>
           </div>
         </div>
@@ -1373,16 +1373,16 @@ pause
       parts.push(`মাস: ${formatYearMonthBengali(selectedMonth)}`);
     } else if (filterMode === 'range') {
       if (startDate && endDate) {
-        parts.push(`তারিখ: ${toBengaliNumerals(startDate)} হতে ${toBengaliNumerals(endDate)}`);
+        parts.push(`তারিখ: ${formatBengaliDateDDMMYYYY(startDate)} হতে ${formatBengaliDateDDMMYYYY(endDate)}`);
       } else if (startDate) {
-        parts.push(`তারিখ: ${toBengaliNumerals(startDate)} হতে পরবর্তী`);
+        parts.push(`তারিখ: ${formatBengaliDateDDMMYYYY(startDate)} হতে পরবর্তী`);
       } else if (endDate) {
-        parts.push(`তারিখ: ${toBengaliNumerals(endDate)} পর্যন্ত`);
+        parts.push(`তারিখ: ${formatBengaliDateDDMMYYYY(endDate)} পর্যন্ত`);
       } else {
         parts.push('তারিখ পরিসীমা');
       }
     } else if (filterMode === 'single' && selectedDate) {
-      parts.push(`তারিখ: ${toBengaliNumerals(selectedDate)}`);
+      parts.push(`তারিখ: ${formatBengaliDateDDMMYYYY(selectedDate)}`);
     } else {
       parts.push('সকল রেকর্ড');
     }
@@ -1432,20 +1432,20 @@ pause
       } else if (filterMode === 'range') {
         if (startDate && endDate) {
           titleContext = `${startDate}_to_${endDate}`;
-          reportPeriodText = `তারিখ পরিসীমা: ${toBengaliNumerals(startDate)} হতে ${toBengaliNumerals(endDate)}`;
+          reportPeriodText = `তারিখ পরিসীমা: ${formatBengaliDateDDMMYYYY(startDate)} হতে ${formatBengaliDateDDMMYYYY(endDate)}`;
         } else if (startDate) {
           titleContext = `From_${startDate}`;
-          reportPeriodText = `তারিখ: ${toBengaliNumerals(startDate)} হতে পরবর্তী সকল`;
+          reportPeriodText = `তারিখ: ${formatBengaliDateDDMMYYYY(startDate)} হতে পরবর্তী সকল`;
         } else if (endDate) {
           titleContext = `UpTo_${endDate}`;
-          reportPeriodText = `তারিখ: ${toBengaliNumerals(endDate)} পর্যন্ত`;
+          reportPeriodText = `তারিখ: ${formatBengaliDateDDMMYYYY(endDate)} পর্যন্ত`;
         } else {
           titleContext = 'তারিখ_পরিসীমা';
           reportPeriodText = 'কাস্টম তারিখ পরিসীমা';
         }
       } else if (filterMode === 'single' && selectedDate) {
         titleContext = `তারিখ_${selectedDate}`;
-        reportPeriodText = `নির্দিষ্ট তারিখ: ${toBengaliNumerals(selectedDate)}`;
+        reportPeriodText = `নির্দিষ্ট তারিখ: ${formatBengaliDateDDMMYYYY(selectedDate)}`;
       } else {
         titleContext = 'সকল_অনুমোদন';
         reportPeriodText = 'সকল অনুমোদনপত্র';
@@ -1496,7 +1496,7 @@ pause
       worksheetData.push([
         idx + 1,
         entry.slNo || String(idx + 1).padStart(3, '0'),
-        entry.date || '',
+        formatDateToDDMMYYYY(entry.date),
         entry.applicantName || '',
         entry.department || 'প্রশাসন বিভাগ',
         entry.budgetHead || '',
@@ -2089,7 +2089,7 @@ pause
                       {toBengaliNumerals(index + 1)}
                     </td>
                     <td className="px-4 py-3 font-medium text-slate-800 whitespace-nowrap">
-                      {toBengaliNumerals(entry.date)}
+                      {formatBengaliDateDDMMYYYY(entry.date)}
                     </td>
                     <td className="px-4 py-3 font-semibold text-slate-900">
                       {entry.applicantName}
@@ -2244,15 +2244,25 @@ pause
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      তারিখ <span className="text-red-500">*</span>
-                    </label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-bold text-slate-700">
+                        তারিখ <span className="text-red-500">*</span>
+                      </label>
+                      <span className="text-[11px] text-slate-400 font-mono">
+                        (dd/mm/yyyy)
+                      </span>
+                    </div>
                     <input
                       type="date"
                       value={reqDate}
                       onChange={(e) => setReqDate(e.target.value)}
                       className="w-full px-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
                     />
+                    {reqDate && (
+                      <span className="text-[11px] text-emerald-700 font-bold mt-1 block">
+                        ফরম্যাট: {formatDateToDDMMYYYY(reqDate)} ({formatBengaliDateDDMMYYYY(reqDate)})
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -2695,7 +2705,7 @@ pause
                   <div className="flex items-center w-36">
                     <span className="font-extrabold whitespace-nowrap text-sm">তারিখ:</span>
                     <span className="border-b border-black flex-1 ml-2 text-center font-black text-sm">
-                      {toBengaliNumerals(entry.date)}
+                      {formatBengaliDateDDMMYYYY(entry.date)}
                     </span>
                   </div>
                 </div>
