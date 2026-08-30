@@ -1,0 +1,90 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'Admin');
+    }
+
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+    }
+    
+    function isSuperAdmin() {
+      return isAuthenticated() && 
+         ((exists(/databases/$(database)/documents/users/$(request.auth.uid)) && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.designation == 'Super Admin') ||
+          request.auth.token.email == 'ovi.it' ||
+          request.auth.token.email == 'bskbdorg@gmail.com');
+    }
+
+    match /files/{fileId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isSuperAdmin();
+    }
+    
+    match /memos/{memoId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isSuperAdmin();
+    }
+    
+    match /employees/{employeeId} {
+      allow read, write: if true;
+    }
+    
+    match /daily_expense_approvals/{approvalId} {
+      allow read, write: if true;
+    }
+    
+    match /daily_expense/{approvalId} {
+      allow read, write: if true;
+    }
+    
+    match /daily_expense_v2/{approvalId} {
+      allow read, write: if true;
+    }
+    
+    match /admin_pins/{pinId} {
+      allow read: if isAuthenticated();
+      allow write: if false; 
+    }
+    
+    match /admin_users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated(); 
+    }
+    
+    match /action_logs/{logId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+    
+    match /expenses/{expenseId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    match /budgets/{budgetId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    match /memo_dropdown_options/{documentId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperAdmin();
+    }
+
+    match /test/{documentId} {
+      allow read, write: if true;
+    }
+  }
+}

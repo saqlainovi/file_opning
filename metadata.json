@@ -1,0 +1,6 @@
+{
+  "name": "File Opening Register",
+  "description": "A comprehensive File Opening Register ERP module featuring a real-time, authenticated, and searchable record-keeping system for departments, subjects, and unique file name generation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

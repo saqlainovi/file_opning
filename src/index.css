@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'SolaimanLipi', 'Siyam Rupali', 'Kalpurush', 'Nikosh', 'Arial', sans-serif;
+  }
+}
+
+.font-bangla {
+  font-family: 'SolaimanLipi', 'Siyam Rupali', 'Kalpurush', 'Nikosh', 'Arial', sans-serif;
+  line-height: 1.6 !important;
+}
+
+input, textarea, select {
+  font-family: inherit;
+}

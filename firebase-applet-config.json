@@ -1,0 +1,10 @@
+{
+  "projectId": "admin--office",
+  "appId": "1:209786262775:web:cbce6c9df52e7999316ff2",
+  "apiKey": "AIzaSyCjstqJn3OAkGiXgx2UL9wP6I2MJjW-yHI",
+  "authDomain": "admin--office.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "admin--office.firebasestorage.app",
+  "messagingSenderId": "209786262775",
+  "measurementId": "G-PHQ1LWD27W"
+}

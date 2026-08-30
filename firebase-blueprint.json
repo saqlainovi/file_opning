@@ -1,0 +1,160 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account information and roles",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique identifier for the user" },
+        "email": { "type": "string", "description": "Email address of the user" },
+        "displayName": { "type": "string", "description": "Full name of the user" },
+        "photoURL": { "type": "string", "description": "Profile picture URL" },
+        "designation": { "type": "string", "description": "Designation within the organization" },
+        "role": { "type": "string", "description": "Access level, e.g. Admin, Contributor" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Record creation timestamp" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "FileEntry": {
+      "title": "File Entry",
+      "description": "A single file registration entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique document ID" },
+        "si": { "type": "string", "description": "Three-digit padded serial number, e.g. 001" },
+        "openingDate": { "type": "string", "description": "Date when file was opened, e.g. 28.06.2026" },
+        "department": { "type": "string", "description": "Department code, e.g. BSK.ACC" },
+        "subject": { "type": "string", "description": "Subject or Accounts Head" },
+        "openingYear": { "type": "string", "description": "Opening year of the file" },
+        "responsiblePerson": { "type": "string", "description": "Name of the responsible person" },
+        "designation": { "type": "string", "description": "Designation of the responsible person" },
+        "fileName": { "type": "string", "description": "Generated unique file name" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Record creation timestamp" },
+        "createdBy": { "type": "string", "description": "UID of the creator" },
+        "createdByName": { "type": "string", "description": "Name of the creator" },
+        "createdByEmail": { "type": "string", "description": "Email of the creator" }
+      },
+      "required": ["si", "openingDate", "department", "subject", "openingYear", "fileName", "createdBy"]
+    },
+    "MemoEntry": {
+      "title": "Memo Entry",
+      "description": "A single memo registration entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique document ID" },
+        "si": { "type": "string", "description": "Three-digit padded serial number, e.g. 001" },
+        "openingDate": { "type": "string", "description": "Date when memo was opened, e.g. 28.06.2026" },
+        "department": { "type": "string", "description": "Department code, e.g. BSK.ACC" },
+        "subject": { "type": "string", "description": "Subject or Accounts Head" },
+        "receiver": { "type": "string", "description": "Name/Organization of the receiver" },
+        "responsiblePerson": { "type": "string", "description": "Name of the responsible person" },
+        "designation": { "type": "string", "description": "Designation of the responsible person" },
+        "memoNumber": { "type": "string", "description": "Generated unique memo number" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Record creation timestamp" },
+        "createdBy": { "type": "string", "description": "UID of the creator" },
+        "createdByName": { "type": "string", "description": "Name of the creator" },
+        "createdByEmail": { "type": "string", "description": "Email of the creator" }
+      },
+      "required": ["si", "openingDate", "department", "subject", "receiver", "memoNumber", "createdBy"]
+    },
+    "Employee": {
+      "title": "Employee",
+      "description": "An employee record in the BSK database",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique document ID" },
+        "sl": { "type": "string", "description": "Serial number" },
+        "name": { "type": "string", "description": "Employee name in English" },
+        "nameBangla": { "type": "string", "description": "Employee name in Bengali" },
+        "fatherName": { "type": "string", "description": "Father's name" },
+        "motherName": { "type": "string", "description": "Mother's name" },
+        "dob": { "type": "string", "description": "Date of birth" },
+        "currentPosition": { "type": "string", "description": "Current designation or position" },
+        "currentDepartment": { "type": "string", "description": "Current department" },
+        "jobId": { "type": "string", "description": "Unique Job ID number" },
+        "joiningDate": { "type": "string", "description": "First joining date" },
+        "status": { "type": "string", "description": "Job status, e.g. Implementation Staff" },
+        "nationality": { "type": "string", "description": "Nationality" },
+        "nid": { "type": "string", "description": "National ID number" },
+        "nomineeName": { "type": "string", "description": "Name of PF Nominee" },
+        "nomineeNid": { "type": "string", "description": "Nominee NID or Birth Registration Certificate" },
+        "relation": { "type": "string", "description": "Relation with nominee" },
+        "share": { "type": "string", "description": "PF Share percentage" },
+        "minorOnBehalf": { "type": "string", "description": "Guardian name on behalf of minor" },
+        "pfAcNo": { "type": "string", "description": "Provident Fund Account number" },
+        "remarks": { "type": "string", "description": "Additional remarks" },
+        "photoURL": { "type": "string", "description": "Base64 encoded compressed image" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Record creation timestamp" },
+        "createdBy": { "type": "string", "description": "UID of the creator" },
+        "createdByName": { "type": "string", "description": "Name of the creator" },
+        "createdByEmail": { "type": "string", "description": "Email of the creator" }
+      },
+      "required": ["name", "jobId", "createdBy"]
+    },
+    "MemoDropdownOption": {
+      "title": "Memo Dropdown Option",
+      "description": "Customizable list values for department, subject, designation, and responsible person dropdowns",
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "description": "List of string values for the dropdown option"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last updated timestamp"
+        }
+      },
+      "required": ["values"]
+    },
+    "DailyExpenseApproval": {
+      "title": "Daily Expense Approval Requisition",
+      "description": "Requisition form for daily emergency expenses",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique document ID" },
+        "slNo": { "type": "string", "description": "Serial number" },
+        "applicantName": { "type": "string", "description": "Name of the applicant" },
+        "department": { "type": "string", "description": "Department name" },
+        "budgetHead": { "type": "string", "description": "Budget head / Khater Nam" },
+        "date": { "type": "string", "description": "Date of requisition" },
+        "items": { "type": "array", "description": "List of expense items" },
+        "totalAmount": { "type": "number", "description": "Total amount" },
+        "totalInWords": { "type": "string", "description": "Total amount in Bengali words" },
+        "status": { "type": "string", "description": "Status e.g. Pending, Approved" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Record creation timestamp" },
+        "createdBy": { "type": "string", "description": "UID of the creator" },
+        "createdByName": { "type": "string", "description": "Name of the creator" },
+        "createdByEmail": { "type": "string", "description": "Email of the creator" }
+      },
+      "required": ["applicantName", "date", "totalAmount"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and permissions mapped by User UID"
+    },
+    "files/{fileId}": {
+      "schema": "FileEntry",
+      "description": "File entries registered in the system"
+    },
+    "memos/{memoId}": {
+      "schema": "MemoEntry",
+      "description": "Memo entries registered in the system"
+    },
+    "employees/{employeeId}": {
+      "schema": "Employee",
+      "description": "Employee database entries registered in the system"
+    },
+    "daily_expense_approvals/{approvalId}": {
+      "schema": "DailyExpenseApproval",
+      "description": "Daily emergency expense approval requisitions"
+    },
+    "memo_dropdown_options/{optionId}": {
+      "schema": "MemoDropdownOption",
+      "description": "Database-driven options for memo field dropdowns"
+    }
+  }
+}
